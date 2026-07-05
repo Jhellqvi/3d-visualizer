@@ -35,10 +35,32 @@ export function createScene(container: HTMLElement) {
 
   let current: THREE.Object3D[] = []
 
+  function frameObjects(objects: THREE.Object3D[]) {
+    const box = new THREE.Box3()
+    for (const obj of objects) box.expandByObject(obj)
+    if (box.isEmpty()) return
+
+    const size = box.getSize(new THREE.Vector3())
+    const center = box.getCenter(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z) || 1
+
+    const fov = (camera.fov * Math.PI) / 180
+    const distance = (maxDim / (2 * Math.tan(fov / 2))) * 1.5
+
+    camera.near = distance / 100
+    camera.far = distance * 100
+    camera.updateProjectionMatrix()
+
+    controls.target.copy(center)
+    camera.position.set(center.x, center.y, center.z + distance)
+    camera.lookAt(center)
+  }
+
   function setModels(objects: THREE.Object3D[]) {
     for (const obj of current) scene.remove(obj)
     current = objects
     for (const obj of objects) scene.add(obj)
+    frameObjects(objects)
     controls.autoRotate = true
   }
 
