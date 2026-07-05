@@ -38,18 +38,18 @@ export const catalog: ModelEntry[] = [
     id: 'truck-interior',
     label: 'Interior',
     category: 'Trucks',
-    load: () => loadGltf('/models/trucks/interior.glb'),
+    load: () => loadGltf('/models/trucks/interior/interior.glb'),
   },
   {
     id: 'truck-cabin',
     label: 'Cabin',
     category: 'Trucks',
-    load: () => loadGltf('/models/trucks/cabin.glb'),
+    load: () => loadGltf('/models/trucks/cabin/cabin.glb'),
   },
   {
     id: 'truck-chassis',
     label: 'Chassis',
     category: 'Trucks',
-    load: () => loadGltf('/models/trucks/chassis.glb'),
+    load: () => loadGltf('/models/trucks/chassis/chassis.glb'),
   },
 ]
