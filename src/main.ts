@@ -6,12 +6,21 @@ import { createModelMenu, createControlsHint } from './ui'
 const app = document.querySelector<HTMLDivElement>('#app')!
 const sceneHandle = createScene(app)
 
+let loadToken = 0
+
 async function selectEntries(entries: ModelEntry[]) {
-  try {
-    const objects = await Promise.all(entries.map((entry) => entry.load()))
-    sceneHandle.setModels(objects)
-  } catch (err) {
-    console.error('Failed to load selection', err)
+  const token = ++loadToken
+  sceneHandle.clearModels()
+
+  for (const entry of entries) {
+    if (token !== loadToken) return
+    try {
+      const object = await entry.load()
+      if (token !== loadToken) return
+      sceneHandle.addModel(object)
+    } catch (err) {
+      console.error(`Failed to load "${entry.label}"`, err)
+    }
   }
 }
 

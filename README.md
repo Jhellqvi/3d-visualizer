@@ -27,6 +27,8 @@ list in `src/catalog.ts`.
 
 ## Controls
 
+- When you select multiple models, they load and appear one at a time
+  (not all at once), with the camera adjusting to fit as each one arrives.
 - The selected model(s) spin slowly on their own.
 - Click and drag to rotate manually (this also stops the auto-spin).
 - Scroll to zoom in and out.

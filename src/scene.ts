@@ -156,11 +156,15 @@ export function createScene(container: HTMLElement) {
     camera.lookAt(center)
   }
 
-  function setModels(objects: THREE.Object3D[]) {
+  function clearModels() {
     for (const obj of current) scene.remove(obj)
-    current = objects
-    for (const obj of objects) scene.add(obj)
-    frameObjects(objects)
+    current = []
+  }
+
+  function addModel(object: THREE.Object3D) {
+    current.push(object)
+    scene.add(object)
+    frameObjects(current)
     controls.autoRotate = true
   }
 
@@ -184,7 +188,8 @@ export function createScene(container: HTMLElement) {
   animate()
 
   return {
-    setModels,
+    clearModels,
+    addModel,
     resetView,
     dispose() {
       window.removeEventListener('resize', onResize)
