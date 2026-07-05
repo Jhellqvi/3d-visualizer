@@ -9,6 +9,7 @@ body {
 }
 
 #app {
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: block;
@@ -17,4 +18,57 @@ body {
 
 canvas {
   display: block;
+}
+
+.model-menu {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1;
+  padding: 0.75rem 1rem;
+  background: rgba(20, 20, 24, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-family: system-ui, sans-serif;
+  color: #e5e7eb;
+}
+
+.model-menu-section h3 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+.model-menu-section:first-child h3 {
+  margin-top: 0;
+}
+
+.model-menu-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.model-menu-section button {
+  display: block;
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.model-menu-section button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.model-menu-section button.active {
+  background: #4f8cff;
+  color: white;
 }

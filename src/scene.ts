@@ -23,11 +23,13 @@ export function createScene(container: HTMLElement) {
   scene.add(light)
   scene.add(new THREE.AmbientLight(0xffffff, 0.4))
 
-  const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshStandardMaterial({ color: 0x4f8cff }),
-  )
-  scene.add(cube)
+  let current: THREE.Object3D | null = null
+
+  function setModel(object: THREE.Object3D) {
+    if (current) scene.remove(current)
+    current = object
+    scene.add(object)
+  }
 
   function onResize() {
     camera.aspect = container.clientWidth / container.clientHeight
@@ -38,13 +40,13 @@ export function createScene(container: HTMLElement) {
 
   function animate() {
     requestAnimationFrame(animate)
-    cube.rotation.x += 0.006
-    cube.rotation.y += 0.01
+    if (current) current.rotation.y += 0.01
     renderer.render(scene, camera)
   }
   animate()
 
   return {
+    setModel,
     dispose() {
       window.removeEventListener('resize', onResize)
       renderer.dispose()
