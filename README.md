@@ -9,9 +9,17 @@ you build next replaces or extends that cube.
 
 ## Adding your own 3D models
 
-Drop a `.glb` file into `src/models/other/` or `src/models/trucks/<part-name>/`
-and it shows up in the on-screen menu automatically — no code changes needed.
-The menu label is just the filename (so `cabin.glb` shows up as "Cabin").
+The menu lists a fixed set of truck parts: Interior, Cabin, and Chassis.
+Drop your `.glb` file into the matching folder, using the exact filename below,
+and that menu button starts working:
+
+- `public/models/trucks/interior/interior.glb`
+- `public/models/trucks/cabin/cabin.glb`
+- `public/models/trucks/chassis/chassis.glb`
+
+To add a new selectable item (a new part, or something under "Other"), add an
+entry to `src/catalog.ts` — that's the one place that lists everything the
+menu can show.
 
 ## Controls
 
@@ -43,9 +51,9 @@ The page auto-refreshes whenever you save a file — no need to restart anything
 | `index.html` | The single HTML page the browser loads. |
 | `src/main.ts` | Starts the app. |
 | `src/scene.ts` | The 3D scene itself — camera, lighting, mouse controls, and the animation loop. |
-| `src/catalog.ts` | Automatically finds every `.glb` file under `src/models/` and lists it. |
+| `src/catalog.ts` | The list of everything selectable in the menu, and where to load each one from. |
 | `src/ui.ts` | Builds the model-selector menu. |
-| `src/models/` | Your 3D model files, organized by category. |
+| `public/models/` | Your 3D model files, organized by category. |
 | `src/style.css` | Makes the 3D view fill the whole browser window, and styles the menu. |
 
 ## Other commands
