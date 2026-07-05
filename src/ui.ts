@@ -116,10 +116,10 @@ export function createModelMenu(
   menu.appendChild(content)
   container.appendChild(menu)
 
-  if (entries.length > 0) {
-    selected.add(entries[0].id)
-    applySelection()
-  }
+  const truckEntries = entries.filter((entry) => entry.category === 'Trucks')
+  const defaultSelection = truckEntries.length > 0 ? truckEntries : entries.slice(0, 1)
+  for (const entry of defaultSelection) selected.add(entry.id)
+  if (defaultSelection.length > 0) applySelection()
 
   return menu
 }
