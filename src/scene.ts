@@ -33,6 +33,62 @@ export function createScene(container: HTMLElement) {
     controls.autoRotate = false
   })
 
+  const pan = { active: false, lastX: 0, lastY: 0 }
+
+  function panBy(dx: number, dy: number) {
+    const distance = camera.position.distanceTo(controls.target)
+    const fov = (camera.fov * Math.PI) / 180
+    const visibleHeight = 2 * Math.tan(fov / 2) * distance
+    const panX = (dx / container.clientHeight) * visibleHeight
+    const panY = (dy / container.clientHeight) * visibleHeight
+
+    const xAxis = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0)
+    const yAxis = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1)
+    const offset = xAxis
+      .multiplyScalar(-panX)
+      .addScaledVector(yAxis, panY)
+
+    camera.position.add(offset)
+    controls.target.add(offset)
+  }
+
+  function onContextMenu(event: MouseEvent) {
+    event.preventDefault()
+  }
+  renderer.domElement.addEventListener('contextmenu', onContextMenu)
+
+  function onPointerDown(event: PointerEvent) {
+    if (event.buttons === 3) {
+      pan.active = true
+      pan.lastX = event.clientX
+      pan.lastY = event.clientY
+      controls.autoRotate = false
+      controls.enabled = false
+    }
+  }
+  renderer.domElement.addEventListener('pointerdown', onPointerDown)
+
+  function onPointerMove(event: PointerEvent) {
+    if (!pan.active) return
+    if (event.buttons !== 3) {
+      pan.active = false
+      controls.enabled = true
+      return
+    }
+    panBy(event.clientX - pan.lastX, event.clientY - pan.lastY)
+    pan.lastX = event.clientX
+    pan.lastY = event.clientY
+  }
+  window.addEventListener('pointermove', onPointerMove)
+
+  function onPointerUp() {
+    if (pan.active) {
+      pan.active = false
+      controls.enabled = true
+    }
+  }
+  window.addEventListener('pointerup', onPointerUp)
+
   let current: THREE.Object3D[] = []
 
   function frameObjects(objects: THREE.Object3D[]) {
@@ -82,6 +138,10 @@ export function createScene(container: HTMLElement) {
     setModels,
     dispose() {
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown)
+      renderer.domElement.removeEventListener('contextmenu', onContextMenu)
       controls.dispose()
       renderer.dispose()
       container.removeChild(renderer.domElement)

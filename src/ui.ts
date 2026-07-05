@@ -103,3 +103,18 @@ export function createModelMenu(
 
   return menu
 }
+
+export function createControlsHint(container: HTMLElement) {
+  const hint = document.createElement('div')
+  hint.className = 'controls-hint'
+
+  const lines = ['Drag: rotate', 'Scroll: zoom', 'Left + right drag: move view']
+  for (const line of lines) {
+    const p = document.createElement('p')
+    p.textContent = line
+    hint.appendChild(p)
+  }
+
+  container.appendChild(hint)
+  return hint
+}

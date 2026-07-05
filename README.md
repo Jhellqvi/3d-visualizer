@@ -30,8 +30,11 @@ list in `src/catalog.ts`.
 - The selected model spins slowly on its own.
 - Click and drag to rotate it manually (this also stops the auto-spin).
 - Scroll to zoom in and out.
+- Hold the left and right mouse buttons together and drag to move the view
+  (pan), useful once you've zoomed in close on a detail.
 - In the menu, hold Shift while clicking to select multiple models at once
   (useful for viewing several truck parts together).
+- A reminder of these controls is always shown in the bottom-right corner.
 
 ## Running it on your machine
 

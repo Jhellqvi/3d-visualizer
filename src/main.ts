@@ -1,7 +1,7 @@
 import './style.css'
 import { createScene } from './scene'
 import { catalog, type ModelEntry } from './catalog'
-import { createModelMenu } from './ui'
+import { createModelMenu, createControlsHint } from './ui'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 const sceneHandle = createScene(app)
@@ -16,3 +16,4 @@ async function selectEntries(entries: ModelEntry[]) {
 }
 
 createModelMenu(app, catalog, selectEntries)
+createControlsHint(app)
