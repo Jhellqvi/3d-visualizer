@@ -9,17 +9,21 @@ you build next replaces or extends that cube.
 
 ## Adding your own 3D models
 
-The menu lists a fixed set of truck parts: Interior, Cabin, and Chassis.
-Drop your `.glb` file into the matching folder, using the exact filename below,
-and that menu button starts working:
+The menu always shows Interior, Cabin, and Chassis under Trucks, and Other
+for anything else. Drop as many `.glb` files as you like into the matching
+folder and every one of them shows up as its own selectable item, named after
+the file (e.g. `chassis-v2.glb` shows up as "Chassis-v2"):
 
-- `public/models/trucks/interior/interior.glb`
-- `public/models/trucks/cabin/cabin.glb`
-- `public/models/trucks/chassis/chassis.glb`
+- `src/models/trucks/interior/`
+- `src/models/trucks/cabin/`
+- `src/models/trucks/chassis/`
+- `src/models/other/`
 
-To add a new selectable item (a new part, or something under "Other"), add an
-entry to `src/catalog.ts` — that's the one place that lists everything the
-menu can show.
+A folder with no files yet just shows "No models yet" until you add one — no
+code changes needed to add more variants.
+
+To add a brand new part (beyond Interior/Cabin/Chassis), edit the `categories`
+list in `src/catalog.ts`.
 
 ## Controls
 
@@ -51,9 +55,9 @@ The page auto-refreshes whenever you save a file — no need to restart anything
 | `index.html` | The single HTML page the browser loads. |
 | `src/main.ts` | Starts the app. |
 | `src/scene.ts` | The 3D scene itself — camera, lighting, mouse controls, and the animation loop. |
-| `src/catalog.ts` | The list of everything selectable in the menu, and where to load each one from. |
+| `src/catalog.ts` | Defines the menu's categories/parts, and auto-finds every `.glb` file under `src/models/`. |
 | `src/ui.ts` | Builds the model-selector menu. |
-| `public/models/` | Your 3D model files, organized by category. |
+| `src/models/` | Your 3D model files, organized by category and part. |
 | `src/style.css` | Makes the 3D view fill the whole browser window, and styles the menu. |
 
 ## Other commands

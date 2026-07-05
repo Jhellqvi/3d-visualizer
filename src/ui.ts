@@ -1,4 +1,4 @@
-import type { ModelEntry } from './catalog'
+import { categories, type ModelEntry } from './catalog'
 
 export function createModelMenu(
   container: HTMLElement,
@@ -37,18 +37,9 @@ export function createModelMenu(
     applySelection()
   }
 
-  const categories = [...new Set(entries.map((entry) => entry.category))]
-
-  for (const category of categories) {
-    const section = document.createElement('div')
-    section.className = 'model-menu-section'
-
-    const heading = document.createElement('h3')
-    heading.textContent = category
-    section.appendChild(heading)
-
+  function renderList(items: ModelEntry[]) {
     const list = document.createElement('ul')
-    for (const entry of entries.filter((e) => e.category === category)) {
+    for (const entry of items) {
       const item = document.createElement('li')
       const button = document.createElement('button')
       button.type = 'button'
@@ -61,11 +52,45 @@ export function createModelMenu(
       const label = document.createElement('span')
       label.textContent = entry.label
       button.appendChild(label)
+
       buttons.set(entry.id, button)
       item.appendChild(button)
       list.appendChild(item)
     }
-    section.appendChild(list)
+    return list
+  }
+
+  for (const category of categories) {
+    const categoryEntries = entries.filter((e) => e.category === category.name)
+
+    const section = document.createElement('div')
+    section.className = 'model-menu-section'
+
+    const heading = document.createElement('h3')
+    heading.textContent = category.name
+    section.appendChild(heading)
+
+    if (category.groups) {
+      for (const group of category.groups) {
+        const groupEntries = categoryEntries.filter((e) => e.group === group)
+
+        const groupHeading = document.createElement('h4')
+        groupHeading.textContent = group
+        section.appendChild(groupHeading)
+
+        if (groupEntries.length === 0) {
+          const empty = document.createElement('p')
+          empty.className = 'model-menu-empty'
+          empty.textContent = 'No models yet'
+          section.appendChild(empty)
+        } else {
+          section.appendChild(renderList(groupEntries))
+        }
+      }
+    } else {
+      section.appendChild(renderList(categoryEntries))
+    }
+
     menu.appendChild(section)
   }
 

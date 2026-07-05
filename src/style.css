@@ -59,10 +59,25 @@ canvas {
   padding-top: 0;
 }
 
+.model-menu-section h4 {
+  margin: 0.5rem 0 0.15rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+
 .model-menu-section ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.model-menu-empty {
+  margin: 0 0 0.25rem;
+  padding-left: 0.25rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #b5b5b5;
 }
 
 .model-menu-section button {
