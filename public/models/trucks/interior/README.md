@@ -1,1 +1,1 @@
-Place the interior model here as interior.glb
+Place the interior models here 
