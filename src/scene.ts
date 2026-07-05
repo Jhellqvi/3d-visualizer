@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export function createScene(container: HTMLElement) {
   const scene = new THREE.Scene()
@@ -23,12 +24,22 @@ export function createScene(container: HTMLElement) {
   scene.add(light)
   scene.add(new THREE.AmbientLight(0xffffff, 0.4))
 
-  let current: THREE.Object3D | null = null
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.target.set(0, 0, 0)
+  controls.enableDamping = true
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 0.6
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false
+  })
 
-  function setModel(object: THREE.Object3D) {
-    if (current) scene.remove(current)
-    current = object
-    scene.add(object)
+  let current: THREE.Object3D[] = []
+
+  function setModels(objects: THREE.Object3D[]) {
+    for (const obj of current) scene.remove(obj)
+    current = objects
+    for (const obj of objects) scene.add(obj)
+    controls.autoRotate = true
   }
 
   function onResize() {
@@ -40,15 +51,16 @@ export function createScene(container: HTMLElement) {
 
   function animate() {
     requestAnimationFrame(animate)
-    if (current) current.rotation.y += 0.01
+    controls.update()
     renderer.render(scene, camera)
   }
   animate()
 
   return {
-    setModel,
+    setModels,
     dispose() {
       window.removeEventListener('resize', onResize)
+      controls.dispose()
       renderer.dispose()
       container.removeChild(renderer.domElement)
     },

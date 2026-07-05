@@ -6,14 +6,13 @@ import { createModelMenu } from './ui'
 const app = document.querySelector<HTMLDivElement>('#app')!
 const sceneHandle = createScene(app)
 
-async function selectEntry(entry: ModelEntry) {
+async function selectEntries(entries: ModelEntry[]) {
   try {
-    const object = await entry.load()
-    sceneHandle.setModel(object)
+    const objects = await Promise.all(entries.map((entry) => entry.load()))
+    sceneHandle.setModels(objects)
   } catch (err) {
-    console.error(`Failed to load "${entry.label}"`, err)
+    console.error('Failed to load selection', err)
   }
 }
 
-createModelMenu(app, catalog, selectEntry)
-selectEntry(catalog[0])
+createModelMenu(app, catalog, selectEntries)
