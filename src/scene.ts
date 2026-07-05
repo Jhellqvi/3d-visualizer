@@ -89,6 +89,50 @@ export function createScene(container: HTMLElement) {
   }
   window.addEventListener('pointerup', onPointerUp)
 
+  function dollyBy(factor: number) {
+    const offset = new THREE.Vector3().subVectors(camera.position, controls.target)
+    offset.multiplyScalar(factor)
+    camera.position.copy(controls.target).add(offset)
+  }
+
+  const KEY_PAN_STEP = 40
+  const KEY_DOLLY_FACTOR = 0.9
+  let spaceHeld = false
+
+  function onKeyDown(event: KeyboardEvent) {
+    if (event.code === 'Space') {
+      spaceHeld = true
+      event.preventDefault()
+      return
+    }
+
+    const isArrowKey = event.code.startsWith('Arrow')
+    if (!isArrowKey) return
+
+    event.preventDefault()
+    controls.autoRotate = false
+
+    if (spaceHeld && event.code === 'ArrowUp') {
+      dollyBy(KEY_DOLLY_FACTOR)
+    } else if (spaceHeld && event.code === 'ArrowDown') {
+      dollyBy(1 / KEY_DOLLY_FACTOR)
+    } else if (event.code === 'ArrowUp') {
+      panBy(0, -KEY_PAN_STEP)
+    } else if (event.code === 'ArrowDown') {
+      panBy(0, KEY_PAN_STEP)
+    } else if (event.code === 'ArrowLeft') {
+      panBy(-KEY_PAN_STEP, 0)
+    } else if (event.code === 'ArrowRight') {
+      panBy(KEY_PAN_STEP, 0)
+    }
+  }
+  window.addEventListener('keydown', onKeyDown)
+
+  function onKeyUp(event: KeyboardEvent) {
+    if (event.code === 'Space') spaceHeld = false
+  }
+  window.addEventListener('keyup', onKeyUp)
+
   let current: THREE.Object3D[] = []
 
   function frameObjects(objects: THREE.Object3D[]) {
@@ -120,6 +164,11 @@ export function createScene(container: HTMLElement) {
     controls.autoRotate = true
   }
 
+  function resetView() {
+    frameObjects(current)
+    controls.autoRotate = true
+  }
+
   function onResize() {
     camera.aspect = container.clientWidth / container.clientHeight
     camera.updateProjectionMatrix()
@@ -136,10 +185,13 @@ export function createScene(container: HTMLElement) {
 
   return {
     setModels,
+    resetView,
     dispose() {
       window.removeEventListener('resize', onResize)
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('keyup', onKeyUp)
       renderer.domElement.removeEventListener('pointerdown', onPointerDown)
       renderer.domElement.removeEventListener('contextmenu', onContextMenu)
       controls.dispose()

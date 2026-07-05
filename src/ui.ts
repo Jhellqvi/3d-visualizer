@@ -104,16 +104,29 @@ export function createModelMenu(
   return menu
 }
 
-export function createControlsHint(container: HTMLElement) {
+export function createControlsHint(container: HTMLElement, onReset: () => void) {
   const hint = document.createElement('div')
   hint.className = 'controls-hint'
 
-  const lines = ['Drag: rotate', 'Scroll: zoom', 'Left + right drag: move view']
+  const lines = [
+    'Drag: rotate',
+    'Scroll: zoom',
+    'Left + right drag: move view',
+    'Arrow keys: move view',
+    'Space + up/down arrow: move closer/further',
+  ]
   for (const line of lines) {
     const p = document.createElement('p')
     p.textContent = line
     hint.appendChild(p)
   }
+
+  const resetButton = document.createElement('button')
+  resetButton.type = 'button'
+  resetButton.className = 'controls-hint-reset'
+  resetButton.textContent = 'Reset view'
+  resetButton.addEventListener('click', onReset)
+  hint.appendChild(resetButton)
 
   container.appendChild(hint)
   return hint

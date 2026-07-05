@@ -32,6 +32,10 @@ list in `src/catalog.ts`.
 - Scroll to zoom in and out.
 - Hold the left and right mouse buttons together and drag to move the view
   (pan), useful once you've zoomed in close on a detail.
+- Arrow keys also move the view, without needing the mouse.
+- Hold Space and press the up/down arrow keys to move closer to or further
+  from the model.
+- Click "Reset view" (bottom-right) to snap back to the original framing.
 - In the menu, hold Shift while clicking to select multiple models at once
   (useful for viewing several truck parts together).
 - A reminder of these controls is always shown in the bottom-right corner.

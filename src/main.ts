@@ -16,4 +16,4 @@ async function selectEntries(entries: ModelEntry[]) {
 }
 
 createModelMenu(app, catalog, selectEntries)
-createControlsHint(app)
+createControlsHint(app, sceneHandle.resetView)
