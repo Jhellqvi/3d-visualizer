@@ -1,1 +1,1 @@
-Place the chassis model here as chassis.glb
+Place the chassis models here
