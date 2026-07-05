@@ -8,10 +8,34 @@ export function createModelMenu(
   const menu = document.createElement('div')
   menu.className = 'model-menu'
 
+  const header = document.createElement('div')
+  header.className = 'model-menu-header'
+
+  const title = document.createElement('span')
+  title.textContent = 'Models'
+  header.appendChild(title)
+
+  const toggleButton = document.createElement('button')
+  toggleButton.type = 'button'
+  toggleButton.className = 'model-menu-toggle'
+  toggleButton.textContent = '−'
+  toggleButton.setAttribute('aria-label', 'Minimize menu')
+  header.addEventListener('click', () => {
+    const minimized = menu.classList.toggle('minimized')
+    toggleButton.textContent = minimized ? '+' : '−'
+    toggleButton.setAttribute('aria-label', minimized ? 'Expand menu' : 'Minimize menu')
+  })
+  header.appendChild(toggleButton)
+
+  menu.appendChild(header)
+
+  const content = document.createElement('div')
+  content.className = 'model-menu-content'
+
   const hint = document.createElement('p')
   hint.className = 'model-menu-hint'
-  hint.textContent = 'Shift+click to select multiple'
-  menu.appendChild(hint)
+  hint.textContent = 'Click to add or remove from view'
+  content.appendChild(hint)
 
   const selected = new Set<string>()
   const buttons = new Map<string, HTMLButtonElement>()
@@ -23,15 +47,10 @@ export function createModelMenu(
     onSelectionChange(entries.filter((entry) => selected.has(entry.id)))
   }
 
-  function handleClick(entry: ModelEntry, event: MouseEvent) {
-    if (event.shiftKey) {
-      if (selected.has(entry.id)) {
-        selected.delete(entry.id)
-      } else {
-        selected.add(entry.id)
-      }
+  function handleClick(entry: ModelEntry) {
+    if (selected.has(entry.id)) {
+      selected.delete(entry.id)
     } else {
-      selected.clear()
       selected.add(entry.id)
     }
     applySelection()
@@ -43,7 +62,7 @@ export function createModelMenu(
       const item = document.createElement('li')
       const button = document.createElement('button')
       button.type = 'button'
-      button.addEventListener('click', (event) => handleClick(entry, event))
+      button.addEventListener('click', () => handleClick(entry))
 
       const dot = document.createElement('span')
       dot.className = 'model-menu-dot'
@@ -91,9 +110,10 @@ export function createModelMenu(
       section.appendChild(renderList(categoryEntries))
     }
 
-    menu.appendChild(section)
+    content.appendChild(section)
   }
 
+  menu.appendChild(content)
   container.appendChild(menu)
 
   if (entries.length > 0) {
@@ -105,16 +125,20 @@ export function createModelMenu(
 }
 
 export function createControlsHint(container: HTMLElement, onReset: () => void) {
+  const isTouch = window.matchMedia('(pointer: coarse)').matches
+
   const hint = document.createElement('div')
   hint.className = 'controls-hint'
 
-  const lines = [
-    'Drag: rotate',
-    'Scroll: zoom',
-    'Left + right drag: move view',
-    'Arrow keys: move view',
-    'Space + up/down arrow: move closer/further',
-  ]
+  const lines = isTouch
+    ? ['Drag: rotate', 'Pinch: zoom', 'Two-finger drag: move view']
+    : [
+        'Drag: rotate',
+        'Scroll: zoom',
+        'Left + right drag: move view',
+        'Arrow keys: move view',
+        'Space + up/down arrow: move closer/further',
+      ]
   for (const line of lines) {
     const p = document.createElement('p')
     p.textContent = line
