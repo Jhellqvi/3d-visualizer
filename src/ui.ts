@@ -52,8 +52,15 @@ export function createModelMenu(
       const item = document.createElement('li')
       const button = document.createElement('button')
       button.type = 'button'
-      button.textContent = entry.label
       button.addEventListener('click', (event) => handleClick(entry, event))
+
+      const dot = document.createElement('span')
+      dot.className = 'model-menu-dot'
+      button.appendChild(dot)
+
+      const label = document.createElement('span')
+      label.textContent = entry.label
+      button.appendChild(label)
       buttons.set(entry.id, button)
       item.appendChild(button)
       list.appendChild(item)
